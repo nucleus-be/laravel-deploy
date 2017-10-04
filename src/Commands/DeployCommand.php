@@ -1,11 +1,8 @@
 <?php
 
-namespace Spatie\Backup\Commands;
+namespace Nucleus\Deploy\Commands;
 
 use Exception;
-use Spatie\Backup\Events\BackupHasFailed;
-use Spatie\Backup\Exceptions\InvalidCommand;
-use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class BackupCommand extends Command
 {

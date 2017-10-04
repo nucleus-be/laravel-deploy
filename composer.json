@@ -30,7 +30,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Nucleus\\Deply\\DeployServiceProvider"
+                "Nucleus\\Deploy\\DeployServiceProvider"
             ]
         }
     }
