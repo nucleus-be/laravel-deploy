@@ -22,8 +22,6 @@ class DeployServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/deploy.php', 'deploy');
-
         $this->app->bind('command.deploy', DeployCommand::class);
 
         $this->commands([
