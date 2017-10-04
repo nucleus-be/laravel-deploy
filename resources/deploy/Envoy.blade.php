@@ -28,7 +28,7 @@
     $deployUser = getenv('DEPLOY_USER');
     $deployHost = getenv('DEPLOY_HOST');
 
-    if (!strlen($repository) || !strlen($deployUser) || !user($deployHost)) {
+    if (!strlen($repository) || !strlen($deployUser) || !strlen($deployHost)) {
         echo "Your .env config is missing one of the following values:
 DEPLOY_HOST=
 DEPLOY_USER=
@@ -49,10 +49,7 @@ DEPLOY_REPOSITORY=
     $user           = get_current_user();
 @endsetup
 
-@servers([
-    'local' => '127.0.0.1',
-    'remote' => '-A -p '. $deploySshPort .' -l '. $deployUser .' '. $deployHost]
-)
+@servers(['local' => '127.0.0.1','remote' => '-A -p '. $deploySshPort .' -l '. $deployUser .' '. $deployHost])
 
 @macro('deploy')
     startDeployment
