@@ -19,7 +19,7 @@ class DeployCommand extends Command
         // it's available in the vendor/bin directory.
         $path = base_path('vendor/bin');
         $envoy = $path .'/envoy';
-        $configPath = resource_path('envoy/Envoy.blade.php');
+        $configPath = resource_path('deploy/Envoy.blade.php');
 
         exec($envoy .' run deploy --path='. $configPath);
     }

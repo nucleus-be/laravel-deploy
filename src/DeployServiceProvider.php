@@ -17,7 +17,7 @@ class DeployServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/envoy/Envoy.blade.php' => resource_path('envoy/Envoy.blade.php'),
+            __DIR__.'/../resources/deploy/Envoy.blade.php' => resource_path('deploy/Envoy.blade.php'),
         ], 'template');
     }
 
