@@ -48,6 +48,7 @@ DEPLOY_REPOSITORY=
     # Paths
     $releasesDir    = "{$baseDir}/{$configReleasesDir}";
     $persistentDir  = "{$baseDir}/{$configPersistentDir}";
+    $configDir      = "{$persistentDir}/config";
     $currentDir     = "{$baseDir}/{$currentName}";
     $newReleaseName = date('Ymd-His');
     $newReleaseDir  = "{$releasesDir}/{$newReleaseName}";
@@ -73,6 +74,20 @@ DEPLOY_REPOSITORY=
 @macro('deploy-code')
     deployOnlyCode
 @endmacro
+
+@task('validateServerEnvironment', ['on' => 'remote'])
+{{ logMessage("👀  Testing remote server environment ...") }}
+    [ -f {{ $configDir }}/env ] ||
+    (
+        echo "❌ -- ERROR --"
+        echo "Missing config at '{{ $configDir }}/env'";
+        echo "Please have a look at the example file in '{{ $configDir }}/env.example' and modify it to your needs.";
+        echo "The easiest way to get started would be to;";
+        echo "$ cp {{ $configDir }}/env.example {{ $configDir }}/env";
+        echo "But you will need to add custom logic to the configuration yourself.";
+        exit 1;
+    );
+@endtask
 
 @task('startDeployment', ['on' => 'local'])
     {{ logMessage("🏃  Starting deployment...") }}
@@ -140,7 +155,7 @@ DEPLOY_REPOSITORY=
 
     # Import the environment config
     cd {{ $newReleaseDir }};
-    ln -nfs {{ $baseDir }}/.env {{ $persistentDir }}/config/env;
+    ln -nfs {{ $baseDir }}/.env {{ $configDir }}/env;
 @endtask
 
 @task('optimizeInstallation', ['on' => 'remote'])
