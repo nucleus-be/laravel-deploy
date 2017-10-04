@@ -3,29 +3,16 @@
 require __DIR__.'/vendor/autoload.php';
 (new \Dotenv\Dotenv(__DIR__, '.env'))->load();
 
-# Make sure the configs have at least some data.
-try {
-    $dotenv->load();
-    $dotenv->required([
-        'DEPLOY_HOST',
-        'DEPLOY_USER',
-        'DEPLOY_DIR_BASE',
-        'DEPLOY_REPOSITORY'
-    ])->notEmpty();
-} catch ( Exception $e )  {
-    echo $e->getMessage();
-}
-
 # Retrieve the values from the config.
-$baseDir = getenv('DEPLOY_DIR_BASE');
+$baseDir = config('deploy.dir_base');
 if ( substr($baseDir, 0, 1) !== '/' ) throw new Exception('Careful - your deployment path does not begin with /');
 
-$releasesDir = getenv('DEPLOY_DIR_RELEASES')
-$persistentDir = getenv('DEPLOY_DIR_PERSISTENT');
-$currentDir = $baseDir ."/". getenv('DEPLOY_CURRENT');
-$deployUser = getenv('DEPLOY_USER');
-$deployHost = getenv('DEPLOY_HOST');
-$deploySshPort = getenv('DEPLOY_SSH_PORT');
+$releasesDir = config('deploy.dir_releases');
+$persistentDir = config('deploy.dir_persistent');
+$currentDir = $baseDir ."/". config('deploy.current');
+$deployUser = config('deploy.user');
+$deployHost = config('deploy.host');
+$deploySshPort = config('deploy.ssh_port');
 $newReleaseName = date('Ymd-His');
 $newReleaseDir = "{$releasesDir}/{$newReleaseName}";
 $user = get_current_user();
