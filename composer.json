@@ -34,5 +34,10 @@
                 "Nucleus\\Deploy\\DeployServiceProvider"
             ]
         }
-    }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php artisan vendor:publish --provider=Nucleus\\Deploy\\DeployServiceProvider"
+        ]
+    },
 }
