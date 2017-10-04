@@ -168,7 +168,7 @@ DEPLOY_REPOSITORY=
 @task('backupDatabase', ['on' => 'remote'])
     {{ logMessage("📀  Backing up database...") }}
     cd {{ $newReleaseDir }}
-    php artisan | rep 'backup:run' && php artisan backup:run
+    php artisan | grep 'backup:run' && php artisan backup:run
 @endtask
 
 @task('migrateDatabase', ['on' => 'remote'])
