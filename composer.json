@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Nuclues\\Deploy\\": "src"
+            "Nucleus\\Deploy\\": "src"
         }
     },
     "config": {
