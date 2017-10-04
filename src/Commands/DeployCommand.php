@@ -3,6 +3,7 @@
 namespace Nucleus\Deploy\Commands;
 
 use Exception;
+use Illuminate\Console\Command;
 
 class DeployCommand extends Command
 {
