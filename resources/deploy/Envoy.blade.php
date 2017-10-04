@@ -64,7 +64,6 @@ DEPLOY_REPOSITORY=
     generateAssets
     updateSymlinks
     optimizeInstallation
-    backupDatabase
     migrateDatabase
     blessNewRelease
     cleanOldReleases
@@ -150,12 +149,6 @@ DEPLOY_REPOSITORY=
     php artisan clear-compiled;
 @endtask
 
-@task('backupDatabase', ['on' => 'remote'])
-    {{ logMessage("📀  Backing up database...") }}
-    cd {{ $newReleaseDir }}
-    php artisan backup:run
-@endtask
-
 @task('migrateDatabase', ['on' => 'remote'])
     {{ logMessage("🙈  Migrating database...") }}
     cd {{ $newReleaseDir }};
@@ -167,7 +160,7 @@ DEPLOY_REPOSITORY=
     ln -nfs {{ $newReleaseDir }} {{ $currentDir }};
     cd {{ $newReleaseDir }}
 
-    php artisan horizon:terminate
+    php artisan | grep 'horizon' && php artisan horizon:terminate
     php artisan config:clear
     php artisan cache:clear
     php artisan config:cache
