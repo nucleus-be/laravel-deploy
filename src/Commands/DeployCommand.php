@@ -4,7 +4,7 @@ namespace Nucleus\Deploy\Commands;
 
 use Exception;
 
-class BackupCommand extends Command
+class DeployCommand extends Command
 {
     /** @var string */
     protected $signature = 'deploy';

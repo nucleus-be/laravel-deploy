@@ -5,7 +5,7 @@ namespace Nucleus\Deploy;
 use Illuminate\Support\ServiceProvider;
 use Nucleus\Deploy\Commands\DeployCommand;
 
-class BackupServiceProvider extends ServiceProvider
+class DeployServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
