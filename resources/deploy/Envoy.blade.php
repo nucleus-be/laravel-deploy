@@ -156,7 +156,7 @@ DEPLOY_REPOSITORY=
 
     # Import the environment config
     cd {{ $newReleaseDir }};
-    ln -nfs {{ $baseDir }}/.env {{ $configDir }}/env;
+    ln -nfs {{ $configDir }}/env .env;
 @endtask
 
 @task('optimizeInstallation', ['on' => 'remote'])
