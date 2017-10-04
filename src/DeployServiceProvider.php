@@ -13,10 +13,6 @@ class DeployServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/deploy.php' => config_path('deploy.php'),
-        ], 'config');
-
-        $this->publishes([
             __DIR__.'/../resources/deploy/Envoy.blade.php' => resource_path('deploy/Envoy.blade.php'),
         ], 'template');
     }

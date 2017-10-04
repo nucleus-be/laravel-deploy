@@ -12,29 +12,31 @@
     # Retrieve the values from the config, inform user if there are pieces missing.
     # These 4 values don't have a default value and need to be supplied in the
     # .env config.
-    $baseDir = config('deploy.dir_base');
-    $repository = config('deploy.repository');
-    $deployUser = config('deploy.user');
-    $deployHost = config('deploy.host');
+    $baseDir    = env('DEPLOY_DIR_BASE');
+    $repository = env('DEPLOY_REPOSITORY');
+    $deployUser = env('DEPLOY_USER');
+    $deployHost = env('DEPLOY_HOST);
 
     if ( substr($baseDir, 0, 1) !== '/' ) throw new Exception('The deployment path does not begin with /. Please make sure you add DEPLOY_DIR_BASE= to your .env file.');
 
     if (!strlen($repository) || !strlen($deployUser) || !user($deployHost)) {
         throw new Exception('Your .env config is missing one of the following values:
-    DEPLOY_HOST=
-    DEPLOY_USER=
-    DEPLOY_DIR_BASE=
-    DEPLOY_REPOSITORY=');
+DEPLOY_HOST=
+DEPLOY_USER=
+DEPLOY_DIR_BASE=
+DEPLOY_REPOSITORY=
+');
     }
 
-    $releasesDir = config('deploy.dir_releases');
-    $persistentDir = config('deploy.dir_persistent');
-    $currentDir = $baseDir ."/". config('deploy.current');
-
-    $deploySshPort = config('deploy.ssh_port');
+    # Get all optional configuration parameters
+    $releasesDir    = env('DEPLOY_DIR_RELEASES') ?? 'releases';
+    $persistentDir  = env('DEPLOY_DIR_PERSISTENT') ?? 'persistent';
+    $currentDir     = $baseDir ."/". env('DEPLOY_CURRENT') ?? 'current';
+    $deploySshPort  = env('DEPLOY_SSH_PORT') ?? 22;
+    $branch         = env('DEPLOY_BRANCH') ?? 'master';
     $newReleaseName = date('Ymd-His');
-    $newReleaseDir = "{$releasesDir}/{$newReleaseName}";
-    $user = get_current_user();
+    $newReleaseDir  = "{$releasesDir}/{$newReleaseName}";
+    $user           = get_current_user();
 
     function logMessage($message) {
         return "echo '\033[32m" .$message. "\033[0m';\n";
@@ -67,8 +69,8 @@
 
 @task('startDeployment', ['on' => 'local'])
     {{ logMessage("🏃  Starting deployment...") }}
-    git checkout master
-    git pull origin master
+    git checkout {{ $branch }}
+    git pull origin {{ $branch }}
 @endtask
 
 @task('cloneRepository', ['on' => 'remote'])
@@ -83,7 +85,7 @@
     mkdir {{ $newReleaseDir }};
 
     # Clone the repo
-    git clone --depth 1 {{ $repository }} {{ $newReleaseName }}
+    git clone --depth 1 -b {{ $branch }} {{ $repository }} {{ $newReleaseName }}
 
     # Configure sparse checkout
     cd {{ $newReleaseDir }}
@@ -180,7 +182,7 @@
 @task('deployOnlyCode',['on' => 'remote'])
     {{ logMessage("💻  Deploying code changes...") }}
     cd {{ $currentDir }}
-    git pull origin master
+    git pull origin {{ $branch }}
     php artisan config:clear
     php artisan cache:clear
     php artisan config:cache
