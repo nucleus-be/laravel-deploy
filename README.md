@@ -1,6 +1,8 @@
-# Deploy your application to a Nucleus managed server with ease.
+# Deploy your application to any server with ease.
 
-This Laravel package allows you to easily deploy your application to a [Nucleus](https://www.nucleus.be/en/) managed server. We take care of the hosting, you can focus on the application.
+This Laravel package allows you to easily deploy your application to any server you have SSH access to. While it'll work for pretty much any type of server, it's optimized for [Nucleus](https://www.nucleus.be/en/) managed servers. We take care of the hosting & uptime, you can focus on the application.
+
+You can use this package to deploy on your own servers, Forge servers, ... you name it.
 
 ## Installation
 
