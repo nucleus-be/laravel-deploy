@@ -1,6 +1,6 @@
 @setup
 # Bootstrap composer + the dotenv configurations.
-require __DIR__.'/vendor/autoload.php';
+@include('vendor/autoload.php')
 (new \Dotenv\Dotenv(__DIR__, '.env'))->load();
 
 # Retrieve the values from the config.
