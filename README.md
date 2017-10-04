@@ -10,6 +10,12 @@ In your application, install the package as such:
 composer require nucleus/laravel-deploy
 ```
 
+Next, publish the package's content.
+
+```
+php artisan vendor:publish --provider=Nucleus\\Deploy\\DeployServiceProvider
+```
+
 After the install, the package installs a new `artisan` command to allow you to quickly deploy.
 
 ```
