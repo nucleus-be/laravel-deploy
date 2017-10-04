@@ -1,38 +1,44 @@
 @setup
-# Bootstrap composer + the dotenv configurations.
-require __DIR__.'/vendor/autoload.php';
-(new \Dotenv\Dotenv(__DIR__, '.env'))->load();
+    # Bootstrap composer + the dotenv configurations.
+    require __DIR__.'/vendor/autoload.php';
+    $dotenv = new Dotenv\Dotenv(__DIR__);
 
-# Retrieve the values from the config, inform user if there are pieces missing.
-# These 4 values don't have a default value and need to be supplied in the
-# .env config.
-$baseDir = config('deploy.dir_base');
-$repository = config('deploy.repository');
-$deployUser = config('deploy.user');
-$deployHost = config('deploy.host');
+    try {
+        $dotenv->load();
+    } catch ( Exception $e )  {
+        echo $e->getMessage();
+    }
 
-if ( substr($baseDir, 0, 1) !== '/' ) throw new Exception('The deployment path does not begin with /. Please make sure you add DEPLOY_DIR_BASE= to your .env file.');
+    # Retrieve the values from the config, inform user if there are pieces missing.
+    # These 4 values don't have a default value and need to be supplied in the
+    # .env config.
+    $baseDir = config('deploy.dir_base');
+    $repository = config('deploy.repository');
+    $deployUser = config('deploy.user');
+    $deployHost = config('deploy.host');
 
-if (!strlen($repository) || !strlen($deployUser) || !user($deployHost)) {
-    throw new Exception('Your .env config is missing one of the following values:
-DEPLOY_HOST=
-DEPLOY_USER=
-DEPLOY_DIR_BASE=
-DEPLOY_REPOSITORY=');
-}
+    if ( substr($baseDir, 0, 1) !== '/' ) throw new Exception('The deployment path does not begin with /. Please make sure you add DEPLOY_DIR_BASE= to your .env file.');
 
-$releasesDir = config('deploy.dir_releases');
-$persistentDir = config('deploy.dir_persistent');
-$currentDir = $baseDir ."/". config('deploy.current');
+    if (!strlen($repository) || !strlen($deployUser) || !user($deployHost)) {
+        throw new Exception('Your .env config is missing one of the following values:
+    DEPLOY_HOST=
+    DEPLOY_USER=
+    DEPLOY_DIR_BASE=
+    DEPLOY_REPOSITORY=');
+    }
 
-$deploySshPort = config('deploy.ssh_port');
-$newReleaseName = date('Ymd-His');
-$newReleaseDir = "{$releasesDir}/{$newReleaseName}";
-$user = get_current_user();
+    $releasesDir = config('deploy.dir_releases');
+    $persistentDir = config('deploy.dir_persistent');
+    $currentDir = $baseDir ."/". config('deploy.current');
 
-function logMessage($message) {
-    return "echo '\033[32m" .$message. "\033[0m';\n";
-}
+    $deploySshPort = config('deploy.ssh_port');
+    $newReleaseName = date('Ymd-His');
+    $newReleaseDir = "{$releasesDir}/{$newReleaseName}";
+    $user = get_current_user();
+
+    function logMessage($message) {
+        return "echo '\033[32m" .$message. "\033[0m';\n";
+    }
 @endsetup
 
 @servers([

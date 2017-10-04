@@ -21,6 +21,6 @@ class DeployCommand extends Command
         $envoy = $path .'/envoy';
         $configPath = resource_path('envoy/Envoy.blade.php');
 
-        exec($envoy .' run --path='. $configPath .' deploy');
+        exec($envoy .' run deploy --path='. $configPath);
     }
 }
