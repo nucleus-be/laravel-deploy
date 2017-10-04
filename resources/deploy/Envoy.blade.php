@@ -65,6 +65,7 @@ DEPLOY_REPOSITORY=
     generateAssets
     updateSymlinks
     optimizeInstallation
+    backupDatabase
     migrateDatabase
     blessNewRelease
     cleanOldReleases
@@ -162,6 +163,12 @@ DEPLOY_REPOSITORY=
     {{ logMessage("✨  Optimizing installation...") }}
     cd {{ $newReleaseDir }};
     php artisan clear-compiled;
+@endtask
+
+@task('backupDatabase', ['on' => 'remote'])
+    {{ logMessage("📀  Backing up database...") }}
+    cd {{ $newReleaseDir }}
+    php artisan | rep 'backup:run' && php artisan backup:run
 @endtask
 
 @task('migrateDatabase', ['on' => 'remote'])
