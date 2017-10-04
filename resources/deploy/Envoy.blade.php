@@ -38,12 +38,17 @@ DEPLOY_REPOSITORY=
         exit;
     }
 
-    $releasesDir    = getenv('DEPLOY_DIR_RELEASES');
-    $persistentDir  = getenv('DEPLOY_DIR_PERSISTENT') ?? 'persistent';
-    $hostPort       = getenv('DEPLOY_CURRENT') ?? 'current';
-    $currentDir     = $baseDir ."/". $hostPort;
-    $deploySshPort  = getenv('DEPLOY_SSH_PORT') ?? 22;
-    $branch         = getenv('DEPLOY_BRANCH') ?? 'master';
+    # Config variables
+    $configReleasesDir    = strlen(getenv('DEPLOY_DIR_RELEASES') > 0) ? getenv('DEPLOY_DIR_RELEASES') : "releases";
+    $configPersistentDir  = strlen(getenv('DEPLOY_DIR_PERSISTENT') > 0) ? getenv('DEPLOY_DIR_PERSISTENT') : "persistent";
+    $currentName          = strlen(getenv('DEPLOY_CURRENT') > 0) ? getenv('DEPLOY_CURRENT') : "current";
+    $deploySshPort        = strlen(getenv('DEPLOY_SSH_PORT') > 0) ? getenv('DEPLOY_SSH_PORT') : "22";
+    $branch               = strlen(getenv('DEPLOY_BRANCH') > 0) ? getenv('DEPLOY_BRANCH') : "master";
+
+    # Paths
+    $releasesDir    = "{$baseDir}/{$configReleasesDir}";
+    $persistentDir  = "{$baseDir}/{$configPersistentDir}";
+    $currentDir     = "{$baseDir}/{$currentName}";
     $newReleaseName = date('Ymd-His');
     $newReleaseDir  = "{$releasesDir}/{$newReleaseName}";
     $user           = get_current_user();
