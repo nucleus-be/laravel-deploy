@@ -5,42 +5,48 @@
 
     try {
         $dotenv->load();
+        $dotenv->required([
+            'DEPLOY_DIR_BASE',
+            'DEPLOY_REPOSITORY',
+            'DEPLOY_USER',
+            'DEPLOY_HOST'
+        ])->notEmpty();
     } catch ( Exception $e )  {
         echo $e->getMessage();
+        exit;
+    }
+
+    function logMessage($message) {
+        return "echo '\033[32m" .$message. "\033[0m';\n";
     }
 
     # Retrieve the values from the config, inform user if there are pieces missing.
     # These 4 values don't have a default value and need to be supplied in the
     # .env config.
-    $baseDir    = env('DEPLOY_DIR_BASE');
-    $repository = env('DEPLOY_REPOSITORY');
-    $deployUser = env('DEPLOY_USER');
-    $deployHost = env('DEPLOY_HOST);
-
-    if ( substr($baseDir, 0, 1) !== '/' ) throw new Exception('The deployment path does not begin with /. Please make sure you add DEPLOY_DIR_BASE= to your .env file.');
+    $baseDir    = getenv('DEPLOY_DIR_BASE');
+    $repository = getenv('DEPLOY_REPOSITORY');
+    $deployUser = getenv('DEPLOY_USER');
+    $deployHost = getenv('DEPLOY_HOST');
 
     if (!strlen($repository) || !strlen($deployUser) || !user($deployHost)) {
-        throw new Exception('Your .env config is missing one of the following values:
+        echo "Your .env config is missing one of the following values:
 DEPLOY_HOST=
 DEPLOY_USER=
 DEPLOY_DIR_BASE=
 DEPLOY_REPOSITORY=
-');
+";
+        exit;
     }
 
-    # Get all optional configuration parameters
-    $releasesDir    = env('DEPLOY_DIR_RELEASES') ?? 'releases';
-    $persistentDir  = env('DEPLOY_DIR_PERSISTENT') ?? 'persistent';
-    $currentDir     = $baseDir ."/". env('DEPLOY_CURRENT') ?? 'current';
-    $deploySshPort  = env('DEPLOY_SSH_PORT') ?? 22;
-    $branch         = env('DEPLOY_BRANCH') ?? 'master';
+    $releasesDir    = getenv('DEPLOY_DIR_RELEASES');
+    $persistentDir  = getenv('DEPLOY_DIR_PERSISTENT') ?? 'persistent';
+    $hostPort       = getenv('DEPLOY_CURRENT') ?? 'current';
+    $currentDir     = $baseDir ."/". $hostPort;
+    $deploySshPort  = getenv('DEPLOY_SSH_PORT') ?? 22;
+    $branch         = getenv('DEPLOY_BRANCH') ?? 'master';
     $newReleaseName = date('Ymd-His');
     $newReleaseDir  = "{$releasesDir}/{$newReleaseName}";
     $user           = get_current_user();
-
-    function logMessage($message) {
-        return "echo '\033[32m" .$message. "\033[0m';\n";
-    }
 @endsetup
 
 @servers([
