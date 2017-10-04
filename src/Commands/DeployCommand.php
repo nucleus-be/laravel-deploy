@@ -15,6 +15,12 @@ class DeployCommand extends Command
 
     public function handle()
     {
-        exec('envoy run deploy');
+        // Envoy has been installed as a dependency of this package, we know
+        // it's available in the vendor/bin directory.
+        $path = base_path('vendor/bin');
+        $envoy = $path .'/envoy';
+        $configPath = resource_path('envoy/Envoy.blade.php');
+
+        exec($envoy .' run --path='. $configPath .' deploy');
     }
 }
