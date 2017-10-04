@@ -3,7 +3,7 @@
 namespace Nucleus\Deploy;
 
 use Illuminate\Support\ServiceProvider;
-use nucleus\Deploy\Commands\DeployCommand;
+use Nucleus\Deploy\Commands\DeployCommand;
 
 class BackupServiceProvider extends ServiceProvider
 {
