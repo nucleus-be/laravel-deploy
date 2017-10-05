@@ -58,6 +58,7 @@ DEPLOY_REPOSITORY=
 @servers(['local' => '127.0.0.1','remote' => '-A -p '. $deploySshPort .' -l '. $deployUser .' '. $deployHost])
 
 @macro('deploy')
+    validateServerEnvironment
     startDeployment
     cloneRepository
     runComposer
@@ -77,17 +78,18 @@ DEPLOY_REPOSITORY=
 @endmacro
 
 @task('validateServerEnvironment', ['on' => 'remote'])
-{{ logMessage("👀  Testing remote server environment ...") }}
-    [ -f {{ $configDir }}/env ] ||
-    (
-        echo "❌ -- ERROR --"
-        echo "Missing config at '{{ $configDir }}/env'";
-        echo "Please have a look at the example file in '{{ $configDir }}/env.example' and modify it to your needs.";
-        echo "The easiest way to get started would be to;";
-        echo "$ cp {{ $configDir }}/env.example {{ $configDir }}/env";
-        echo "But you will need to add custom logic to the configuration yourself.";
-        exit 1;
-    );
+    {{ logMessage("👀  Testing remote server environment ...") }}
+    CONFIG_FILE={{ $configDir }}/env
+    HAS_UNMODIFIED_CONFIG=$(grep -Pc 'APP_KEY=$' $CONFIG_FILE || true)
+    if [ $HAS_UNMODIFIED_CONFIG -eq 1 ]; then
+        # Config not yet completed
+        echo "We found this configuration file: '{{ $configDir }}/env'"
+        echo "However, it contains Laravel-specific sections that have not yet been completed."
+        echo "Please update the configuration file."
+        exit 1
+    else
+        echo "Config OK."
+    fi
 @endtask
 
 @task('startDeployment', ['on' => 'local'])
