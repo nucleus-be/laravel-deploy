@@ -21,7 +21,18 @@ class DeployCommand extends Command
         $envoy = $path .'/envoy';
         $configPath = resource_path('deploy/Envoy.blade.php');
 
-        $fullCommand = $envoy .' run deploy --path='. $configPath;
-        passthru($fullCommand);
+        // TODO: further validate the necessary ENV variables here?
+
+        // If deploy file exists, run the deploy
+        if (is_file($configPath)) {
+            $fullCommand = $envoy .' run deploy --path='. $configPath;
+            passthru($fullCommand);
+        } else {
+            $this->line('Deploy template not found: '. $configPath);
+            $this->line('Did you publish the module in Laravel?');
+            $this->line('$ php artisan vendor:publish --provider=Nucleus\\Deploy\\DeployServiceProvider
+        ');
+            $this->error('Halting deploy, template was not found.');
+        }
     }
 }
