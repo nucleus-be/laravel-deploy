@@ -168,7 +168,7 @@ DEPLOY_REPOSITORY=
 @task('backupDatabase', ['on' => 'remote'])
     {{ logMessage("📀  Backing up database...") }}
     cd {{ $newReleaseDir }}
-    php artisan | grep 'backup:run' && php artisan backup:run
+    php artisan | grep 'backup:run' && php artisan backup:run || echo 'Back-up package not configured, skipping.'
 @endtask
 
 @task('migrateDatabase', ['on' => 'remote'])
@@ -182,7 +182,7 @@ DEPLOY_REPOSITORY=
     ln -nfs {{ $newReleaseDir }} {{ $currentDir }};
     cd {{ $newReleaseDir }}
 
-    php artisan | grep 'horizon' && php artisan horizon:terminate
+    php artisan | grep 'horizon' && php artisan horizon:terminate || true
     php artisan config:clear
     php artisan cache:clear
     php artisan config:cache
