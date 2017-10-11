@@ -149,12 +149,12 @@ DEPLOY_REPOSITORY=
     # Remove the storage directory and replace with persistent data
     rm -rf {{ $newReleaseDir }}/storage;
     cd {{ $newReleaseDir }};
-    ln -nfs {{ $baseDir }}/persistent/storage storage;
+    ln -nfs {{ $persistentDir }}/storage storage;
 
     # Remove the public/media directory and replace with persistent data
     rm -rf {{ $newReleaseDir }}/public/media;
     cd {{ $newReleaseDir }};
-    ln -nfs {{ $baseDir }}/persistent/media public/media;
+    ln -nfs {{ $persistentDir }}/media public/media;
 
     # Import the environment config
     cd {{ $newReleaseDir }};
