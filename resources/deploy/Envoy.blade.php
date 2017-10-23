@@ -197,7 +197,7 @@ DEPLOY_REPOSITORY=
     {{ logMessage("🚾  Cleaning up old releases...") }}
     # Delete all but the 3 most recent.
     cd {{ $releasesDir }}
-    ls -dt {{ $releasesDir }}/* | tail -n +3 | xargs -d "\n" rm -rf;
+    ls -dt ./* | tail -n +4 | xargs -d "\n" rm -rf;
 @endtask
 
 @task('finishDeploy', ['on' => 'local'])
