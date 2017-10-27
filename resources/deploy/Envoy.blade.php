@@ -209,7 +209,7 @@ DEPLOY_REPOSITORY=
     {{ logMessage("🚀  Application deployed!") }}
 @endtask
 
-@task('deployOnlyCode',['on' => 'remote'])
+@task('deployOnlyCode', ['on' => 'remote'])
     {{ logMessage("💻  Deploying code changes...") }}
     cd {{ $currentDir }}
     git pull origin {{ $branch }}
@@ -220,5 +220,7 @@ DEPLOY_REPOSITORY=
 @endtask
 
 @finished
-    @slack($slackWebHook, $slackChannel, $slackCustomMessage)
+    if ($slackWebHook && $slackChannel) {
+        @slack($slackWebHook, $slackChannel, $slackCustomMessage)
+    }
 @endfinished
