@@ -45,6 +45,11 @@ DEPLOY_REPOSITORY=
     $deploySshPort        = strlen(getenv('DEPLOY_SSH_PORT')) > 0 ? getenv('DEPLOY_SSH_PORT') : "22";
     $branch               = strlen(getenv('DEPLOY_BRANCH')) > 0 ? getenv('DEPLOY_BRANCH') : "master";
 
+    # Slack config variables
+    $slackWebHook         = strlen(getenv('DEPLOY_SLACK_WEBHOOK')) > 0 ? getenv('DEPLOY_SLACK_WEBHOOK') : null;
+    $slackChannel         = strlen(getenv('DEPLOY_SLACK_CHANNEL')) > 0 ? getenv('DEPLOY_SLACK_CHANNEL') : null;
+    $slackCustomMessage   = strlen(getenv('DEPLOY_SLACK_MESSAGE')) > 0 ? getenv('DEPLOY_SLACK_MESSAGE') : null;
+
     # Paths
     $releasesDir    = "{$baseDir}/{$configReleasesDir}";
     $persistentDir  = "{$baseDir}/{$configPersistentDir}";
@@ -204,7 +209,7 @@ DEPLOY_REPOSITORY=
     {{ logMessage("🚀  Application deployed!") }}
 @endtask
 
-@task('deployOnlyCode',['on' => 'remote'])
+@task('deployOnlyCode', ['on' => 'remote'])
     {{ logMessage("💻  Deploying code changes...") }}
     cd {{ $currentDir }}
     git pull origin {{ $branch }}
@@ -213,3 +218,9 @@ DEPLOY_REPOSITORY=
     php artisan config:cache
     ~/scripts/reload_php-fpm.sh
 @endtask
+
+@finished
+    if ($slackWebHook && $slackChannel) {
+        @slack($slackWebHook, $slackChannel, $slackCustomMessage)
+    }
+@endfinished
