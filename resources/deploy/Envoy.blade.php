@@ -50,6 +50,13 @@ DEPLOY_REPOSITORY=
     $slackChannel         = strlen(getenv('DEPLOY_SLACK_CHANNEL')) > 0 ? getenv('DEPLOY_SLACK_CHANNEL') : null;
     $slackCustomMessage   = strlen(getenv('DEPLOY_SLACK_MESSAGE')) > 0 ? getenv('DEPLOY_SLACK_MESSAGE') : null;
 
+    # HipChat config variables
+    $hipChatWebHook       = strlen(getenv('DEPLOY_HIPCHAT_WEBHOOK')) > 0 ? getenv('DEPLOY_HIPCHAT_WEBHOOK') : null;
+    $hipChatRoom          = strlen(getenv('DEPLOY_HIPCHAT_ROOM')) > 0 ? getenv('DEPLOY_HIPCHAT_ROOM') : null;
+    $hipChatFrom          = strlen(getenv('DEPLOY_HIPCHAT_FROM')) > 0 ? getenv('DEPLOY_HIPCHAT_FROM') : null;
+    $hipChatCustomMessage = strlen(getenv('DEPLOY_HIPCHAT_MESSAGE')) > 0 ? getenv('DEPLOY_HIPCHAT_MESSAGE') : null;
+    $hipChatColor         = strlen(getenv('DEPLOY_HIPCHAT_COLOR')) > 0 ? getenv('DEPLOY_HIPCHAT_COLOR') : null;
+
     # Paths
     $releasesDir    = "{$baseDir}/{$configReleasesDir}";
     $persistentDir  = "{$baseDir}/{$configPersistentDir}";
@@ -222,5 +229,15 @@ DEPLOY_REPOSITORY=
 @finished
     if ($slackWebHook && $slackChannel) {
         @slack($slackWebHook, $slackChannel, $slackCustomMessage)
+    }
+
+    if ($hipChatWebHook && $hipChatRoom && $hipChatFrom) {
+        @hipchat(
+            $hipChatWebHook,
+            $hipChatRoom,
+            $hipChatFrom,
+            $hipChatCustomMessage,
+            $hipChatColor
+        )
     }
 @endfinished
