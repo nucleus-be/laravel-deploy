@@ -232,12 +232,6 @@ DEPLOY_REPOSITORY=
     }
 
     if ($hipChatWebHook && $hipChatRoom && $hipChatFrom) {
-        @hipchat(
-            $hipChatWebHook,
-            $hipChatRoom,
-            $hipChatFrom,
-            $hipChatCustomMessage,
-            $hipChatColor
-        )
+        @hipchat($hipChatWebHook, $hipChatRoom, $hipChatFrom, $hipChatCustomMessage, $hipChatColor)
     }
 @endfinished
