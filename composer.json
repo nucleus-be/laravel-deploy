@@ -17,9 +17,9 @@
         }
     ],
     "require": {
-        "php": "^7.0",
-        "laravel/envoy": "^1.4",
-        "spatie/laravel-backup": "^5.0"
+        "php": "^7.1",
+        "laravel/envoy": "^1.5",
+        "spatie/laravel-backup": "^5.11"
     },
     "autoload": {
         "psr-4": {
