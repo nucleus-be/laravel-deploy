@@ -19,7 +19,7 @@
     "require": {
         "php": "^7.1",
         "laravel/envoy": "^1.5",
-        "spatie/laravel-backup": "^5.11"
+        "spatie/laravel-backup": "^6.1"
     },
     "autoload": {
         "psr-4": {
